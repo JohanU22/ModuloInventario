@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
 const Producto = db.define(
-    'Producto', //Nombre de la tabla debe ser plural
+    'Productos', //Nombre de la tabla debe ser plural
     {
         Codigo:{
             type: DataTypes.STRING(50),
@@ -22,19 +22,19 @@ const Producto = db.define(
             allowNull: false
         },
         Existencia: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             allowNull: false
         },
         Precio: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             allowNull: false
         },
         Costo: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             allowNull: false
         },
         CantidadMinima: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             allowNull: false
         },
         exento: {
@@ -58,17 +58,17 @@ const Producto = db.define(
             allowNull: true
         },
         impuestov: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             defaultValue: '0',
             allowNull: true
         },
         impuestoValor: {
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             defaultValue: '0',
             allowNull: true
         },
         ultimo:{
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             defaultValue: '0',
             allowNull: true
         },
@@ -81,7 +81,7 @@ const Producto = db.define(
             allowNull: true
         },
         cantidadprincipal:{
-            type: DataTypes.Double(),
+            type: DataTypes.DOUBLE,
             defaultValue: '0',
             allowNull: true
         },
