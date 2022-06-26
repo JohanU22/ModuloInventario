@@ -1,6 +1,6 @@
 const sequelize = require('sequelize');
 const db = new sequelize(
-    'sigres', //base
+    'sifcon', //base
     'root',  //user
     'Root0417',  //contraseña
     {

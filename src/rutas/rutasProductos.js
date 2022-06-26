@@ -1,8 +1,11 @@
-const{ Router } = require ('express');
+const { Router } = require('express');
+const { body,query } = require('express-validator');
 const controladorProductos=require('../controladores/controladorProductos');
-const router = Router ();
-router.get('/',controladorProductos.inicio);
-router.get('/listarProductos',controladorProductos.listarProductos);
-router.post('/guardar',controladorProductos.guardar);
-router.put('/modificar',controladorProductos.modificar);
-module.exports=router;
+const rutas = Router();
+rutas.get('/listar', controladorProductos.Listar);
+
+
+//rutas.post('/guardar',controladorProductos.guardar);
+//rutas.put('/modificar',controladorProductos.modificar);
+
+module.exports=rutas;
