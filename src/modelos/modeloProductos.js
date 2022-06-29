@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
 const Producto = db.define(
-    'Productos', //Nombre de la tabla debe ser plural
+    'productos', //Nombre de la tabla debe ser plural
     {
         Codigo:{
             type: DataTypes.STRING(50),
@@ -78,6 +78,7 @@ const Producto = db.define(
         },
         idprincipal:{
             type: DataTypes.STRING(15),
+            //defaultValue: '1',
             allowNull: true
         },
         cantidadprincipal:{
@@ -97,7 +98,7 @@ const Producto = db.define(
 
     },
     {
-        tableName: 'Productos',
+        tableName: 'productos',
         timestamps: false, //Para que no se genere la columna de fecha de creacion y actualizacion
     }
 
