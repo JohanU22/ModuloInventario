@@ -5,5 +5,12 @@
 .idea
 .sass-cache/
 /nbproject/
+src/controladores/controladorAutenticacion.js
+package-lock.json
+package.json
+src/controladores/controladorProductos.js
+src/modelos/modeloProductos.js
+src/rutas/rutasProductos.js
+src/app.js
 /nbproject/private/
 /node_modules/
