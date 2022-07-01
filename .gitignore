@@ -7,3 +7,7 @@
 /nbproject/
 /nbproject/private/
 /node_modules/
+package-lock.json
+package.json
+src/controladores/controladorAutenticacion.js
+src/app.js
