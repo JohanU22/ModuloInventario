@@ -1,0 +1,14 @@
+*.DS_Store
+*.log
+*.zip
+.env
+.idea
+notas.txt
+package-lock.json
+package.json
+src/controladores/controladorAutenticacion.js
+src/app.js
+.sass-cache/
+/nbproject/
+/nbproject/private/
+/node_modules/
