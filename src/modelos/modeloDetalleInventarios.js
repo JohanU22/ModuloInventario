@@ -1,8 +1,10 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
+/*
 const InventarioFisico = require('./')
 const Productos = require('./')
-const DetalleInventario = db.define(
+*/
+const DetalleInventarios = db.define(
     'detalle_inventarios',
     {
         id:{
@@ -53,11 +55,16 @@ const DetalleInventario = db.define(
             allowNull: false
         }
 
+    },
+    {
+        tableName: 'detalle_inventarios',
+        timestamps: false
     }
+
 
 );
 
-
+/*
 //Relaciones con las otras tablas
 //tabla Inventario Fisico
 DetalleInventario.hasMany(InventarioFisico,{
@@ -79,4 +86,5 @@ Productos.belongsTo(DetalleInventario,{
     foreignKey: 'productos_Codigo',
     otherKey: 'id'
 });
-module.exports = Productos;
+*/
+module.exports = DetalleInventarios;
