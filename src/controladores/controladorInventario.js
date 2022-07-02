@@ -95,7 +95,6 @@ exports.Editar = async(req, res) => {
 
         }
     }
-    
     res.json(msj);
 
 };
