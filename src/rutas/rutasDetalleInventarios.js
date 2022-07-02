@@ -36,5 +36,5 @@ rutas.delete('/eliminar',
 query('id')
 .notEmpty().withMessage('No se aceptan valores vacios para el id'),
 controladorDetalleInventarios.Eliminar);
-
+//
 module.exports=rutas;

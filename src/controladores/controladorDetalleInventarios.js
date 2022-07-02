@@ -64,27 +64,27 @@ exports.Modificar = async(req, res) => {
 
     } else {
         const { id } = req.query;
-        const { fisico, ultimo, ingreso, egreso, precio,  productos_Codigo, inventarios_id } = req.body;
+        const { fisico, ultimo, ingreso, egreso, precio, productos_Codigo, inventarios_id} = req.body;
 
         try {
-            var buscarID = await modeloDetalleInventarios.findOne({
+            var BuscarDetalleInventarios = await modeloDetalleInventarios.findOne({
                 where:{
-                    id:id
+                    id : id
                 }
             });
            
-            if (!buscarID) {
+            if (!BuscarDetalleInventarios) {
                 msj.mensaje = 'El id del registro no existe'
                 
             }else{
-                buscarID.fisico = fisico;
-                BuscarID.ultimo = ultimo;
-                BuscarID.ingreso = ingreso;
-                BuscarID.egreso = egreso;
-                BuscarID.precio = precio;
-                BuscarID.productos_Codigo = productos_Codigo;
-                BuscarID.inventarios_id = inventarios_id;
-                await buscarID.save(); 
+                BuscarDetalleInventarios.fisico = fisico;
+                BuscarDetalleInventarios.ultimo = ultimo;
+                BuscarDetalleInventarios.ingreso = ingreso;
+                BuscarDetalleInventarios.egreso = egreso;
+                BuscarDetalleInventarios.precio = precio;
+                BuscarDetalleInventarios.productos_Codigo = productos_Codigo;
+                BuscarDetalleInventarios.inventarios_id = inventarios_id;
+                await BuscarDetalleInventarios.save(); 
                 msj.mensaje = 'Registros actualizado';
             }
         } catch (error) {
