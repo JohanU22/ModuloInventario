@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const db = new sequelize(
     'sifcon', //base
     'root',  //user
-    'Root0417',  //contraseña
+    'JMAF2002',  //contraseña
     {
         host: 'localhost', //directorio
         dialect: 'mysql', //motor sql
