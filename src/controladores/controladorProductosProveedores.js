@@ -79,3 +79,43 @@ exports.Editar = async(req, res) => {
     }
     res.json(msj);
 };
+
+exports.Eliminar = async(req, res)=> {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {
+        mensaje: ''
+    };
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {
+            msj.mensaje += element.msg + '. ';
+        });
+
+    } else {
+        const { id } = req.query;
+        try {
+            var buscarID = await modeloProductoProveedores.findOne({
+                where:{
+                    id:id
+                }
+            });
+           
+            if (!buscarID) {
+                msj.mensaje = 'El id del registro no existe'
+                
+            }else{                
+                await modeloProductoProveedores.destroy({
+                    where: 
+                    {
+                        id:id
+                    }
+                });
+                msj.mensaje = 'Registros  Eliminado';
+            }
+        } catch (error) {
+            msj.mensaje = 'Error al eliminar los datos';
+
+        }
+    }
+    res.json(msj);
+ };

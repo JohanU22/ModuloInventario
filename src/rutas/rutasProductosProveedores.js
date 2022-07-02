@@ -31,3 +31,8 @@ body ('idproveedor')
     .notEmpty().withMessage('No se aceptan valores vacios para el idproveedor')
     .isInt().withMessage('El codigo de proveedores debe ser entero'), 
 controladorProductosProveedores.Editar);
+
+rutas.delete('/eliminar',
+query('id')
+.notEmpty().withMessage('No se aceptan valores vacios para le id').isInt().withMessage('El id del empleado debe ser un entero'),
+controladorProductosProveedores.Eliminar);
