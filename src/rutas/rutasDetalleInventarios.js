@@ -6,4 +6,20 @@ const rutas = Router();
 rutas.get('/listar', controladorDetalleInventarios.Listar );
 
 //Ruta Guardar
-module.exports = rutas;
+rutas.post ('/guardar', 
+ body ('productos_Codigo')
+.notEmpty().withMessage('No se aceptan valores vacios para el id'),
+
+
+body ('inventarios_id')
+.notEmpty().withMessage('No se aceptan valores vacios para el id') 
+.isInt().withMessage('El atributo inventarios_id debe ser un entero'),
+controladorDetalleInventarios.Guardar);
+
+
+
+///Ruta editar
+
+
+
+module.exports=rutas;

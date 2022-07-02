@@ -35,15 +35,15 @@ const DetalleInventarios = db.define(
         },
         actual:{
             type: DataTypes.DOUBLE,
-            allowNull: false
+            allowNull: true
         },
         balanceunidad:{
             type: DataTypes.DOUBLE,
-            allowNull: false
+            allowNull: true
         },
         balanceprecio:{
             type: DataTypes.DOUBLE,
-            allowNull: false
+            allowNull: true
         },
         //LLAVES FORANEAS
         productos_Codigo:{
