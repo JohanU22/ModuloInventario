@@ -40,3 +40,42 @@ exports.Guardar = async (req, res) => {
     }
     res.json(msj);    
 };
+
+exports.Editar = async(req, res) => {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {
+        mensaje: ''
+    };
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {
+            msj.mensaje += element.msg + '. ';
+        });
+
+    } else {
+        const { id } = req.query;
+        const { idproducto, idproveedor } = req.body;
+
+        try {
+            var buscarID = await modeloProductoProveedores.findOne({
+                where:{
+                    id:id
+                }
+            });
+           
+            if (!buscarID) {
+                msj.mensaje = 'El id del registro no existe'
+                
+            }else{
+                buscarID.idproducto = idproducto;
+                buscarID.idproveedor = idproveedor;
+                await buscarID.save(); 
+                msj.mensaje = 'Registros actualizado';
+            }
+        } catch (error) {
+            msj.mensaje = 'Error al editar los datos';
+
+        }
+    }
+    res.json(msj);
+};
