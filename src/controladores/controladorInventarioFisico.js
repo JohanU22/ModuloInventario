@@ -3,35 +3,9 @@ const modeloInventarioFisico = require('../modelos/modeloInventarioFisico');
 const { Op } = require('sequelize');
 const { and } = require('../configuraciones/db');
 
-function validacion (req){
-    const validaciones = validationResult(req);
-    var errores = [];
-    var error = {
-        mensaje: '',
-        parametro: '',
-    };
-    var msj = {
-        estado: 'correcto',
-        mensaje: 'Peticion ejecutada correctamente',
-        datos: '',
-        errores: ''
-    };
-    
-    if(validaciones.errors.length > 0)
-    {
-        validaciones.errors.forEach(element => {
-            error.mensaje = element.msg;
-            error.parametro = element.param;
-            errores.push(error);
-        });
-        msj.estado = 'precaucion';
-        msj.mensaje = 'La peticion no se ejecuto';
-        msj.errores = errores;
-    }
-    return msj;
-};
-
+//Listar #######################################################
 exports.Listar = async (req, res) => {
+    var msj = {mensaje: ''}
     try{
         const lista = await modeloInventarioFisico.findAll();//findOne()
         console.log(lista);
@@ -41,134 +15,102 @@ exports.Listar = async (req, res) => {
         console.error(error);
         res.json(error);
     }
+    res.json(msj);
 };
 
-exports.Guardar = async (req,res) =>{
-    var msj = validacion(req);
-    if (msj.errores.length > 0){
-        msjRes(res, 200, msj);
-    }
-    else{
+//Guardar #######################################################
+exports.Guardar = async (req, res) => {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {mensaje: ''};
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {msj.mensaje += element.msg + '. ';});
+    } else {
         const{id, productos_Codigo, inventarios_id, cantidadactual, cantidadsistema, costo, precio, fechahora, balanceexistencia, faltante, sobrante} = req.body;
         try {
-            const buscar = await modeloInventarioFisico.findOne({where:{productos_Codigo: productos_Codigo, inventarios_id: inventarios_id}});
-            if(buscar){
-                msj.estado = 'precaucion';
-                msj.mensaje = 'La peticion se ejecuto correctamente';
-                msj.errores={
-                    mensaje: 'El producto ya esta registrado dentro del inventario',
-                    parametro: 'productos_Codigo',
-                };
-                msjRes(res, 200, msj);
-            }
-            else{
-                await modeloInventarioFisico.create({
-                    ...req.body,
-                })
-                .then((data)=>{
-                    msj.datos=data;
-                    msjRes(res, 200, msj);
-                })
-                .catch((er)=>{
-                    msj.estado = 'error';
-                    msj.mensaje = 'La peticion no se ejecuto';
-                    msj.errores = er.parent.sqlMessage;
-                    msjRes(res, 500, msj);
+            await modeloInventarioFisico.create(
+                {
+                    id:id,
+                    productos_Codigo:productos_Codigo,
+                    inventarios_id:inventarios_id,
+                    cantidadactual:cantidadactual,
+                    cantidadsistema:cantidadsistema,
+                    costo:costo,
+                    precio:precio,
+                    fechahora:fechahora,
+                    balanceexistencia:balanceexistencia,
+                    faltante:faltante,
+                    sobrante:sobrante
                 });
-            }
-        } 
-        catch (er) {
-            console.error(er);
-            msj.estado = 'error';
-            msj.mensaje = 'La peticion no se ejecuto';
-            msj.errores = er;
-            msjRes(res, 500, msj);
+            msj.mensaje = 'Registro agregado';
+        } catch (error) {
+            msj.mensaje = 'Error al guardar el registro';
         }
     }
+    res.json(msj);
 };
 
-exports.Modificar = async (req, res) =>{
-    var msj = validacion(req);
-    
-    if (msj.errores.length > 0){
-        msjRes(res, 200, msj);
-    }
-    else{
+//Editar #######################################################
+exports.Editar = async(req, res) => {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {mensaje: ''};
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {msj.mensaje += element.msg + '. ';});
+    } else {
+        const { id } = req.query;
+        const { productos_Codigo, inventarios_id, cantidadactual, cantidadsistema, costo, precio, fechahora, balanceexistencia, faltante, sobrante} = req.body;
+
         try {
-            const { id } = req.query;
-            var buscar = await modeloInventarioFisico.findByPk(id);
-            if(!buscar){
-                msj.estado = 'precaucion';
-                msj.mensaje = 'La peticion se ejecuto correctamente';
-                msj.errores={
-                    mensaje: 'El id del Inventario Fisico no existe',
-                    parametro: 'id',
-                };
-                msjRes(res, 200, msj);
-            }
-            else{
-                await modeloInventarioFisico.update(
-                    {...req.body},
-                    { where:{id: id}})
-                    .then((data) => {
-                        msj.datos=data;
-                        msjRes(res, 200, msj);
-                    })
-                    .catch((er)=>{
-                        msj.estado = 'error';
-                        msj.mensaje = 'La peticion no se ejecuto';
-                        msj.errores = er.parent.sqlMessage;
-                        msjRes(res, 500, msj);
-                    }
-                );
+            var buscarInvFis = await modeloInventarioFisico.findOne({where:{id:id}});
+           
+            if (!buscarInvFis) {
+                msj.mensaje = 'El id del inventario fisico no existe'
+            }else{
+                buscarInvFis.productos_Codigo = productos_Codigo;
+                buscarInvFis.inventarios_id = inventarios_id;
+                buscarInvFis.cantidadactual = cantidadactual;
+                buscarInvFis.cantidadsistema = cantidadsistema;
+                buscarInvFis.costo = costo;
+                buscarInvFis.precio = precio;
+                buscarInvFis.fechahora = fechahora;
+                buscarInvFis.balanceexistencia = balanceexistencia;
+                buscarInvFis.faltante = faltante;
+                buscarInvFis.sobrante = sobrante ;
+                await buscarInvFis.save(); 
+                msj.mensaje = 'Registro actualizado';
             }
         } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La peticion no se ejecuto';
-            msj.errores = error;
-            msjRes(res, 500, msj);
+            msj.mensaje = 'Error al modificar los datos';
         }
     }
+    res.json(msj);
 };
 
-exports.Eliminar = async (req, res) =>{
-    var msj = validacion(req);
-    
-    if (msj.errores.length > 0){
-        msjRes(res, 200, msj);
-    }
-    else{
+//Eliminar #######################################################
+exports.Eliminar = async(req, res)=> {
+    const validaciones = validationResult(req);
+    console.log(validaciones.errors);
+    const msj = {
+        mensaje: ''
+    };
+    if (validaciones.errors.length > 0) {
+        validaciones.errors.forEach(element => {msj.mensaje += element.msg + '. ';});
+    } else {
+        const { id } = req.query;
         try {
-            const { id } = req.query;
-            var buscar = await modeloInventarioFisico.findByPk(id);
-            if(!buscar){
-                msj.estado = 'precaucion';
-                msj.mensaje = 'La peticion se ejecuto correctamente';
-                msj.errores={
-                    mensaje: 'El id del Inventario Fisico no existe',
-                    parametro: 'id',
-                };
-                msjRes(res, 200, msj);
-            }
-            else{
-                    await modeloInventarioFisico.destroy(
-                    {where:{id: id}})
-                    .then((data) => {
-                        msj.datos=data;
-                        msjRes(res, 200, msj);
-                    })
-                    .catch((er)=>{
-                        msj.estado = 'error';
-                        msj.mensaje = 'La peticion no se ejecuto';
-                        msj.errores = er.parent.sqlMessage;
-                        msjRes(res, 500, msj);
-                    });
+            var buscarInvFis = await modeloInventarioFisico.findOne({where:{id:id}});
+           
+            if (!buscarInvFis) {
+                msj.mensaje = 'El id del inventario no existe'
+                
+            }else{                
+                await modeloInventarioFisico.destroy({where: {id:id}});
+                msj.mensaje = 'Registro Eliminado';
             }
         } catch (error) {
-            msj.estado = 'error';
-            msj.mensaje = 'La peticion no se ejecuto';
-            msj.errores = error;
-            msjRes(res, 500, msj);
+            msj.mensaje = 'Error al eliminar los datos';
         }
     }
-};
+    res.json(msj);
+ };

@@ -1,9 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
 const codigoProductos = require('./ModeloProductos');
-const inventarioFisico = db.define(
-    'inventario_fisico', 
-    {
+const inventarioFisico = db.define('inventario_fisico', {
         id:{
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -67,4 +65,5 @@ inventarioFisico.belongsTo(codigoProductos,{
     foreignKey: 'productos_Codigo',
     otherKey: 'Codigo'
 });
+
 module.exports = inventarioFisico;

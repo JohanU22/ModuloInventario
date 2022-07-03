@@ -3,8 +3,10 @@ const { body,query } = require('express-validator');
 const controladorInventarioFisico=require('../controladores/controladorInventarioFisico');
 const rutas = Router();
 
+//Listar
 rutas.get('/listar', controladorInventarioFisico.Listar);
 
+//Guardar
 rutas.post('/guardar',
     body ('productos_Codigo')
         .notEmpty().withMessage('No se aceptan valores vacios para el id')
@@ -27,6 +29,7 @@ rutas.post('/guardar',
         .isFloat().withMessage('La valor del precio debe ser un flotante'),
 controladorProductos.Guardar);
 
+//Modificar
 rutas.put('/modificar',
     query ('id')
         .notEmpty().withMessage('No se aceptan valores vacios para el id')
@@ -52,6 +55,7 @@ rutas.put('/modificar',
         .isFloat().withMessage('La valor del precio debe ser un flotante'),
 controladorInventarioFisico.modificar);
 
+//Eliminar
 rutas.delete('/eliminar', 
     query('id')
         .notEmpty().withMessage('No se aceptan valores vacios para el id')
