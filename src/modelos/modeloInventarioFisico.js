@@ -74,6 +74,7 @@ InventarioFisico.belongsTo(Producto,{
     otherKey: 'Codigo'
 });
 
+
 Inventario.hasMany(InventarioFisico, {
     foreignKey: 'inventarios_id',
     otherKey: 'id'
@@ -82,5 +83,6 @@ InventarioFisico.belongsTo(Inventario,{
     foreignKey: 'inventarios_id',
     otherKey: 'id'
 });
+
 
 module.exports = InventarioFisico;

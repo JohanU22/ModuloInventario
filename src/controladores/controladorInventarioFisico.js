@@ -26,6 +26,7 @@ function validacion (req){
     return msj;
 };
 
+//Inicio #######################################################
 exports.Inicio = async (req, res)=>{
     var msj = validacion(req);
     const listaModulos = [
@@ -64,7 +65,7 @@ exports.Inicio = async (req, res)=>{
                             precio: "precio del producto (debe ser valor numerico), Obligatorio",
                             
                             /* //Otros parametros (usa default/generados por script)
-                            
+
                             fechahora: "Fecha de registro",       //DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
                             balanceexistencia: "",      //DOUBLE GENERATED ALWAYS AS ((`cantidadsistema` - `cantidadactual`)) VIRTUAL,
                             faltante: "",       //GENERATED ALWAYS AS ((case when (`balanceexistencia` < 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` >= 0) then 0 end)) STORED,
