@@ -10,4 +10,5 @@
 package-lock.json
 package.json
 src/controladores/controladorAutenticacion.js
+src/configuraciones/db.js
 src/app.js
