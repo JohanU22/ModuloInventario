@@ -1,6 +1,105 @@
 const { validationResult } = require('express-validator');
 const modeloInventario = require('../modelos/modeloInventario');
 const { Op } = require('sequelize');
+const msjRes = require('../componentes/mensaje');
+function validacion (req){
+    const validaciones = validationResult(req);
+    var errores = [];
+    var error = {
+        mensaje: '',
+        parametro: '',
+    };
+    var msj = {
+        estado: 'Correcto',
+        mensaje: 'Petición ejecutada correctamente',
+        datos: '',
+        errores: ''
+    };
+    
+    if(validaciones.errors.length > 0)
+    {
+        validaciones.errors.forEach(element => {
+            error.mensaje = element.msg;
+            error.parametro = element.param;
+            errores.push(error);
+        });
+        msj.estado = 'Precaucion';
+        msj.mensaje = 'La petición no se ejecutó';
+        msj.errores = errores;
+    }
+    return msj;
+};
+exports.Inicio = (req, res)=>{
+    var msj = validacion(req);
+    const listaModulos =
+     [
+        {
+            modulo: "Inventario",
+            rutas:[
+                {
+                ruta: "/modulo/Inventario",
+                metodo: "get",
+                parametros:"",
+                descripcion: "Inicio del modulo Inventario"
+                },
+                //listar
+                {
+                    ruta: "/modulo/Inventario/listar",
+                    metodo: "get",
+                    parametros:"",
+                    descripcion: "Lista los registros del modulo Inventario"
+                    },
+                //guardar
+                {
+                    ruta: "/modulo/Inventario/guardar",
+                    metodo: "post",
+                    parametros:{
+                        fechahora: "Fecha y hora de ingreso del registro de inventario. Tipo DATE. Formato(AAAA-MM-DD HH:MM:SS)",
+                        faltante: 'Cantidad de articulos faltantes. Tipo DOUBLE',
+                        sobrante: 'Cantidad de articulos sobrantes. Tipo DOUBLE',
+                        usuarios_idregistro: "Registro perteneciente a la tabla de Usuarios, sirve para identificar el usuario. Tipo INT",
+                        estaciones_NumeroEstacion: "Registro perteneciente a la tabla Estaciones, sirve para identificar la estación. Tipo INT",
+                    },
+                    descripcion: "Guarda registros del modulo Inventario"
+                    },
+                //modificar
+                {
+                    ruta: "/modulo/Inventario/editar",
+                    metodo: "put",
+                    parametros:{
+                        fechahora: "Fecha y hora de ingreso del registro de inventario. Tipo DATE. Formato(AAAA-MM-DD HH:MM:SS)",
+                        faltante: 'Cantidad de articulos faltantes. Tipo DOUBLE',
+                        sobrante: 'Cantidad de articulos sobrantes. Tipo DOUBLE',
+                        usuarios_idregistro: "Registro perteneciente a la tabla de Usuarios, sirve para identificar el usuario. Tipo INT",
+                        estaciones_NumeroEstacion: "Registro perteneciente a la tabla Estaciones, sirve para identificar la estación. Tipo INT",
+                    },
+                    descripcion: "Modifica registros del modulo Inventario"
+                    },
+                //eliminar
+                {
+                    ruta: "/modulo/Inventario/eliminar",
+                    metodo: "delete",
+                    parametros:{
+                        id: "Identificador del Inventario de tipo entero. Nota: Campo obligatorio."
+                    },
+                    descripcion: "Elimina registros del modulo Inventario"
+                    },     
+            ],
+        }
+    ];
+    const datos = {
+        api: "Modulo Inventario",
+        descripcion: "Interfaz de programación del modulo Inventario",
+        propiedad: " ",
+        desarrollador: "José Almendarez",
+        colaboradores: "",
+        fecha: "03/07/2022",
+        listaModulos
+    };
+    msj.datos=datos;
+    msjRes(res, 200, msj);
+};
+
 
 //Listar
 exports.Listar = async (req, res) => {

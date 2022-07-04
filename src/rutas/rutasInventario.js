@@ -2,6 +2,9 @@ const {Router} = require('express');
 const { body, query } = require('express-validator');
 const controladorInventario = require('../controladores/controladorInventario');
 const rutas = Router();
+//Modulo
+rutas.get('/', controladorInventario.Inicio);
+
 //Listar
 rutas.get('/listar', controladorInventario.Listar);
 
