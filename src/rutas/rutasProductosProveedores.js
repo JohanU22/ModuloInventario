@@ -3,9 +3,11 @@ const { body,query } = require('express-validator');
 const controladorProductosProveedores =require('../controladores/controladorProductosProveedores');
 const rutas = Router();
 
+rutas.get('/inicio', 
+controladorProductosProveedores.Inicio);
+
 rutas.get('/listar', 
 controladorProductosProveedores.Listar);
-module.exports=rutas;
 
 rutas.post('/guardar', 
 body ('idproducto')
@@ -36,3 +38,4 @@ rutas.delete('/eliminar',
 query('id')
 .notEmpty().withMessage('No se aceptan valores vacios para le id').isInt().withMessage('El id del empleado debe ser un entero'),
 controladorProductosProveedores.Eliminar);
+module.exports=rutas;
