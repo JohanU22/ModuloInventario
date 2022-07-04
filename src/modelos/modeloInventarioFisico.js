@@ -1,7 +1,9 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
-const codigoProductos = require('./ModeloProductos');
-const inventarioFisico = db.define('inventario_fisico', {
+const Producto = require('./ModeloProductos');
+const Inventario = require('./ModeloInventario');
+const InventarioFisico = db.define('inventario_fisico', 
+    {
         id:{
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -18,18 +20,22 @@ const inventarioFisico = db.define('inventario_fisico', {
         },
         cantidadactual: {
             type: DataTypes.DOUBLE,
+            defaultValue: '0',
             allowNull: false
         },
         cantidadsistema: {
             type: DataTypes.DOUBLE,
+            defaultValue: '0',
             allowNull: false
         },
         costo: {
             type: DataTypes.DOUBLE,
+            defaultValue: '0',
             allowNull: false
         },
         precio: {
             type: DataTypes.DOUBLE,
+            defaultValue: '0',
             allowNull: false
         },
         fechahora: {
@@ -57,13 +63,24 @@ const inventarioFisico = db.define('inventario_fisico', {
         timestamps: false, //Para que no se genere la columna de fecha de creacion y actualizacion
     }
 );
-codigoProductos.hasMany(inventarioFisico, {
+
+//Llaves foraneas ========================================
+Producto.hasMany(InventarioFisico, {
     foreignKey: 'productos_Codigo',
     otherKey: 'Codigo'
 });
-inventarioFisico.belongsTo(codigoProductos,{
+InventarioFisico.belongsTo(Producto,{
     foreignKey: 'productos_Codigo',
     otherKey: 'Codigo'
 });
 
-module.exports = inventarioFisico;
+Inventario.hasMany(InventarioFisico, {
+    foreignKey: 'inventarios_id',
+    otherKey: 'id'
+});
+InventarioFisico.belongsTo(Inventario,{
+    foreignKey: 'inventarios_id',
+    otherKey: 'id'
+});
+
+module.exports = InventarioFisico;

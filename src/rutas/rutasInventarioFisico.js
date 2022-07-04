@@ -3,8 +3,16 @@ const { body,query } = require('express-validator');
 const controladorInventarioFisico=require('../controladores/controladorInventarioFisico');
 const rutas = Router();
 
-//Listar
+//Listar/Inicio
+rutas.get('/', controladorEmpleados.Inicio);
 rutas.get('/listar', controladorInventarioFisico.Listar);
+
+//Id
+rutas.get('/id', 
+    query('id')
+        .notEmpty().withMessage('No se aceptan valores vacios para el id')
+        .isInt().withMessage('El id del inventario fisico debe ser entero'),
+    controladorEmpleados.BuscarId);
 
 //Guardar
 rutas.post('/guardar',
@@ -27,7 +35,7 @@ rutas.post('/guardar',
     body ('precio')
         .notEmpty().withMessage('No se aceptan valores vacios para el precio')
         .isFloat().withMessage('La valor del precio debe ser un flotante'),
-controladorProductos.Guardar);
+    controladorProductos.Guardar);
 
 //Modificar
 rutas.put('/modificar',
@@ -53,13 +61,13 @@ rutas.put('/modificar',
     body ('precio')
         .notEmpty().withMessage('No se aceptan valores vacios para el precio')
         .isFloat().withMessage('La valor del precio debe ser un flotante'),
-controladorInventarioFisico.modificar);
+    controladorInventarioFisico.Modificar);
 
 //Eliminar
 rutas.delete('/eliminar', 
     query('id')
         .notEmpty().withMessage('No se aceptan valores vacios para el id')
         .isInt().withMessage('El id del inventario fisico debe ser entero'),
-controladorInventarioFisico.Eliminar);
+    controladorInventarioFisico.Eliminar);
 
 module.exports=rutas;
