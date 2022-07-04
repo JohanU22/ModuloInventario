@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const modeloDetalleInventarios = require('../modelos/modeloDetalleInventarios')
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
+const { DOUBLE } = require('sequelize');
 
 function validacion (req){
     const validaciones = validationResult(req);
@@ -110,7 +111,7 @@ exports.Inicio = async (req, res)=>{
     msjRes(res, 200, msj);
   
 };
-/*
+
 //Buscar ID
 exports.BuscarId = async (req, res)=>{
     var msj = validacion(req);
@@ -118,16 +119,18 @@ exports.BuscarId = async (req, res)=>{
     if(msj.errores.length > 0){
         msjRes(res, 200, msj);
     }
-
     else{
         try{
             const {id} = req.query;
             const BuscarDetalleInventarios = await modeloDetalleInventarios.findOne({
-                attributes: ['id','productos_Codigo','precio']
+                attributes: ['id','precio', 'productos_Codigo', 'inventarios_id'],
+                where:{
+                    id
+                }
 
             });
             if(!BuscarDetalleInventarios){
-                msj.estado = 'precaucion';
+                msj.estado = '!Precaucion!';
                 msj.mensaje = 'La peticion se ejecuto correctamente';
                 msj.errores={
                     mensaje: 'El id del usuario no existe',
@@ -137,16 +140,61 @@ exports.BuscarId = async (req, res)=>{
             else{
                 msj.datos = BuscarDetalleInventarios;
             }
-            msj.datos= BuscarDetalleInventarios
-        } catch(error){
+            msjRes(res, 200, msj);
 
-        }
+            } catch(er){
+                 msj.estado = 'error';
+                msj.mensaje = 'La peticion no se ejecuto correctamente';
+                 msj.errores = er;
+                msjRes(res, 500, msj);
+            }
     }
-
 };
 
 //Buscar Filtro
-*/
+exports.BuscarFiltro = async (req, res)=>{
+var msj = validacion(req);
+
+if(msj.errores.length > 0){
+    msjRes(res, 200, msj);
+}
+    else{
+        try {
+            var { filtro } = req.query;
+            filtro= '%'+filtro+'%';
+            const BuscarDetalleInventarios = await modeloDetalleInventarios.findAll({
+                attributes: ['id','precio', 'productos_Codigo', 'inventarios_id'],
+                where:{
+                    [Op.or]:{
+                        id: {[Op.like]: filtro}
+                       
+                    }
+                }
+            });
+            if(!BuscarDetalleInventarios){
+                msj.estado = '!Precaucion!';
+                msj.mensaje = 'La peticion no se ejecuto correctamente';
+                msj.errores={
+                    mensaje: 'No existen ingresos con esos parametros',
+                    parametro: 'filtro',
+                };
+        }
+            else{
+                msj.datos=BuscarDetalleInventarios;
+            }
+            msjRes(res, 200, msj);
+
+    }catch (error) {
+        msj.estado = 'error';
+        msj.mensaje = 'La peticion no se ejecuto';
+        msj.errores = error;
+        msjRes(res, 500, msj);
+    }
+        }
+};
+
+
+
 //LISTAR
 exports.Listar = async (req, res) => {
     try{
