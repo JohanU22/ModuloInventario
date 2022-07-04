@@ -2,7 +2,9 @@ const { validationResult } = require('express-validator');
 const modeloProductoProveedores = require('../modelos/modeloProductosProveedores');
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
+const ProductoProveedor = require('../modelos/modeloProductosProveedores');
 
+//Función de Validación
 function validacion (req){
     const validaciones = validationResult(req);
     var errores = [];
@@ -31,6 +33,7 @@ function validacion (req){
     return msj;
 };
 
+//Modulo de Inicio
 exports.Inicio = async (req, res)=>{
     var msj = validacion(req);
     const listaModulos = 
@@ -97,8 +100,7 @@ exports.Inicio = async (req, res)=>{
     msjRes(res, 200, msj);
 };
 
-
-
+//Modulo de Listar
 exports.Listar = async (req, res) => {
     try{
         const lista = await modeloProductoProveedores.findAll();//findOne()
@@ -111,6 +113,7 @@ exports.Listar = async (req, res) => {
     }
 };
 
+//Modulo de Guardar
 exports.Guardar = async (req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
@@ -138,6 +141,7 @@ exports.Guardar = async (req, res) => {
     res.json(msj);    
 };
 
+//Modulo de Editar
 exports.Editar = async(req, res) => {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
@@ -178,6 +182,7 @@ exports.Editar = async(req, res) => {
     res.json(msj);
 };
 
+//Modulo de Eliminar
 exports.Eliminar = async(req, res)=> {
     const validaciones = validationResult(req);
     console.log(validaciones.errors);
@@ -217,3 +222,82 @@ exports.Eliminar = async(req, res)=> {
     }
     res.json(msj);
  };
+
+ //Modulo Buscar ID
+ exports.BuscarId = async (req, res)=>{
+    var msj = validacion(req);
+    
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            const { id } = req.query;
+            const buscarProductoProveedor = await modeloProductoProveedores.findOne({
+                where:{
+                    id
+                }
+            });
+            if(!buscarProductoProveedor){
+                msj.estado = 'precaucion';
+                msj.mensaje = 'La peticion se ejecuto correctamente';
+                msj.errores={
+                    mensaje: 'El id del usuario no existe',
+                    parametro: 'id',
+                };
+            }
+            else{
+                msj.datos= buscarProductoProveedor;
+            }
+            msjRes(res, 200, msj);
+        } catch (er) {
+            msj.estado = 'precaucion';
+            msj.estado = 'error';
+            msj.mensaje = 'La peticion no se ejecuto';
+            msj.errores = er;
+            msjRes(res, 500, msj);
+        }
+    }
+};
+
+//BuscarFiltro
+/*
+exports.BuscarFiltro = async (req, res)=>{
+    var msj = validacion(req);
+    
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            var { filtro } = req.query;
+            filtro= '%'+filtro+'%';
+            const buscarProductoProveedor = await modeloProductoProveedores.findAll({
+                attributes: ['id','idproducto','idproveedor'],
+                where:{
+                    [Op.or]:{
+                        idproducto: {[Op.like]: filtro},
+                    }
+                }
+            });
+            if(!buscarProductoProveedor){
+                msj.estado = 'precaucion';
+                msj.mensaje = 'La peticion se ejecuto correctamente';
+                msj.errores={
+                    mensaje: 'No existen usuarios con estos parametros',
+                    parametro: 'filtro',
+                };
+            }
+            else{
+                msj.datos=buscarProductoProveedor;
+            }
+            msjRes(res, 200, msj);
+        } catch (error) {
+            msj.estado = 'error';
+            msj.mensaje = 'La peticion no se ejecuto';
+            msj.errores = error;
+            msjRes(res, 500, msj);
+        }
+    }
+};
+*/
