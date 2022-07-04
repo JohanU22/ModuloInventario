@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator');
 const modeloPromociones = require('../modelos/modeloPromociones');
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
-const Promocion = require('../modelos/modeloPromociones');
+const { DOUBLE } = require('sequelize');
 function validacion (req){
     const validaciones = validationResult(req);
     var errores = [];
@@ -118,93 +118,85 @@ exports.Listar = async (req, res) => {
         res.json(error);
     }
 };
-//id
+//Busca id
 exports.BuscarId = async (req, res)=>{
     var msj = validacion(req);
-    const { id } = req.query;
-    if (msj.errores.length > 0){
+
+    if(msj.errores.length > 0){
         msjRes(res, 200, msj);
     }
     else{
-        try {
-            const lista = await modeloPromociones.findAll({
-                include: {
-                    model: Promocion,
-                    attributes:['productos_Codigocol'],
-                },
+        try{
+            const {id} = req.query;
+            const buscarPromocion = await modeloPromociones.findOne({
+                attributes: ['id', 'productos_Codigocol' , 'inicio', 'fin', 'creado', 'modificado'],
                 where:{
                     id
                 }
+
             });
-            if (lista.length==0){
-                msj.estado = 'precaucion';
+            if(!buscarPromocion){
+                msj.estado = '!Precaucion!';
                 msj.mensaje = 'La peticion se ejecuto correctamente';
                 msj.errores={
-                    mensaje: 'El id del empleado no existe',
+                    mensaje: 'El id del usuario no existe',
                     parametro: 'id',
                 };
             }
             else{
-                console.log(JSON.stringify(lista, null, ' '));
-                msj.datos= lista;
+                msj.datos = buscarPromocion;
             }
             msjRes(res, 200, msj);
-        } catch (error) {
-            console.error(error);
-            msj.estado = 'error';
-            msj.mensaje = 'La peticion no se ejecuto';
-            msj.errores = error;
-            msjRes(res, 500, msj);
-        }
-    }        
+
+            } catch(er){
+                 msj.estado = 'error';
+                msj.mensaje = 'La peticion no se ejecuto correctamente';
+                 msj.errores = er;
+                msjRes(res, 500, msj);
+            }
+    }
 };
 //filtro
 exports.BuscarFiltro = async (req, res)=>{
     var msj = validacion(req);
-    const { id } = req.query;
-    if (msj.errores.length > 0){
+    
+    if(msj.errores.length > 0){
         msjRes(res, 200, msj);
     }
-    else{
-        const filtro = '%' + req.query.filtro + '%';
-        const limite = req.query.limite;
-        try {
-            const lista = await modeloPromociones.findAll({
-                include: {
-                    model: Promocion,
-                    attributes:['productos_Codigocol'],
-                },
-                where:{
-                    [Op.or]:[
-                        {productos_Codigocol: {[Op.like]: filtro}},                   
-                    ]
-                },
-                limit: 10,
-            });
-            if (lista.length==0){
-                msj.estado = 'precaucion';
-                msj.mensaje = 'La peticion se ejecuto correctamente';
-                msj.errores={
-                    mensaje: 'No existe ningun empleado con esta informacion',
-                    parametro: 'filtro',
-                };
+        else{
+            try {
+                var { filtro } = req.query;
+                filtro= ''+filtro+'';
+                const buscarPromocion = await modeloPromociones.findAll({
+                    attributes: ['id', 'productos_Codigocol' , 'inicio', 'fin', 'creado', 'modificado'],
+                    where:{
+                        [Op.or]:{
+                            productos_Codigocol: {[Op.like]: filtro}
+                           
+                        }
+                    }
+                });
+                if(!buscarPromocion){
+                    msj.estado = '!Precaucion!';
+                    msj.mensaje = 'La peticion no se ejecuto correctamente';
+                    msj.errores={
+                        mensaje: 'No existen ingresos con esos parametros',
+                        parametro: 'filtro',
+                    };
             }
-            else{
-                console.log(JSON.stringify(lista, null, ' '));
-                msj.datos= lista;
-            }
-            msjRes(res, 200, msj);
-        } catch (error) {
-            console.error(error);
+                else{
+                    msj.datos=buscarPromocion;
+                }
+                msjRes(res, 200, msj);
+    
+        }catch (error) {
             msj.estado = 'error';
             msj.mensaje = 'La peticion no se ejecuto';
             msj.errores = error;
             msjRes(res, 500, msj);
         }
-    }        
-};
-
-
+            }
+    };    
 //Guardar
 exports.Guardar = async (req, res) => {
     const validaciones = validationResult(req);
@@ -325,7 +317,5 @@ exports.Eliminar = async(req, res)=> {
     }
     res.json(msj);
  };
-
-
 
 
