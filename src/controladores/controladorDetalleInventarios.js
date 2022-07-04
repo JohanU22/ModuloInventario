@@ -161,12 +161,12 @@ if(msj.errores.length > 0){
     else{
         try {
             var { filtro } = req.query;
-            filtro= '%'+filtro+'%';
+            filtro= ''+filtro+'';
             const BuscarDetalleInventarios = await modeloDetalleInventarios.findAll({
                 attributes: ['id','precio', 'productos_Codigo', 'inventarios_id'],
                 where:{
                     [Op.or]:{
-                        id: {[Op.like]: filtro}
+                        precio: {[Op.like]: filtro}
                        
                     }
                 }
