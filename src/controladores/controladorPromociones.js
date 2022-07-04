@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');             
-const modeloPromociones = require('../modelos/modeloPromociones');
+const modeloPromociones = require('../modelos/modelosPromociones');
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
 const { DOUBLE } = require('sequelize');
@@ -211,13 +211,13 @@ exports.Guardar = async (req, res) => {
         });
 
     } else {
-        const {id, productos_Codigocol , inicio, fin, creado, modificado} = req.body;
+        const {id, productos_Codigo , inicio, fin, creado, modificado} = req.body;
 
         try {
             await modeloPromociones.create(
                 {   
                     id:id,
-                    productos_Codigocol: productos_Codigocol,
+                    productos_Codigo: productos_Codigo,
                     inicio: inicio,
                     fin: fin,
                     creado: creado,

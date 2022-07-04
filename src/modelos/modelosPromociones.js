@@ -9,7 +9,7 @@ const Promocion = db.define(
             autoIncrement: true,                         
             allowNull: false                            
         },
-        productos_Codigocol:{
+        productos_Codigo:{
             type: DataTypes.STRING(15),                           
             allowNull: false                             
         },

@@ -1,6 +1,6 @@
 const { Router } = require('express');            
 const { body,query } = require('express-validator');     
-const controladorPromociones = require('../controladores/controladoresPromociones');          
+const controladorPromociones = require('../controladores/controladorPromociones');          
 const rutas = Router(); 
 rutas.get('/inicio', controladorPromociones.Inicio );                             
 rutas.get('/listar', controladorPromociones.Listar);             
@@ -12,12 +12,12 @@ query('id').notEmpty().withMessage('Debe escribir el id del empleado')
 controladorPromociones.BuscarId);
 
 rutas.get('/filtro', 
-query('productos_Codigocol')
+query('productos_Codigo')
 .notEmpty().withMessage('NO se aceptan valores vacios para el codigo del producto'),                    
 controladorPromociones.BuscarFiltro);
 
 rutas.post('/guardar',
-body ('productos_Codigocol')
+body ('productos_Codigo')
 .notEmpty().withMessage('NO se aceptan valores vacios para el codigo del producto')                    
 .isLength({max:15}).withMessage('La cantidad maxima de caracteres son 15 para el codigo del producto'), 
 controladorPromociones.Guardar);
