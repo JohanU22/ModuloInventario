@@ -1,4 +1,4 @@
-const { DataTypes} = require('Sequelize');       
+const { DataTypes } = require('sequelize');       
 const db = require('../configuraciones/db');
 const Promocion = db.define(
     'promociones',
@@ -9,17 +9,17 @@ const Promocion = db.define(
             autoIncrement: true,                         
             allowNull: false                            
         },
-        productos_Codigo:{
+        productos_Codigocol:{
             type: DataTypes.STRING(15),                           
-            allowNull: false                              
+            allowNull: false                             
         },
         inicio:{
             type: DataTypes.DATE,                           
-            allowNull: false                              
+            allowNull: true                           
         },
         fin:{
             type: DataTypes.DATE,                           
-            allowNull: false                              
+            allowNull: true                              
         },
         creado:{
             type: DataTypes.DATE,                           

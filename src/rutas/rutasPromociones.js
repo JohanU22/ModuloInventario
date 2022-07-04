@@ -1,13 +1,25 @@
 const { Router } = require('express');            
 const { body,query } = require('express-validator');     
-const controladorPromociones = require('../controladores/controladorPromociones');          
+const controladorPromociones = require('../controladores/controladoresPromociones');          
 const rutas = Router();                              
-rutas.get('/listar',controladorPromociones.Listar);             
+rutas.get('/listar', controladorPromociones.Listar);             
+
+
+rutas.get('/id', 
+query('id').notEmpty().withMessage('Debe escribir el id del empleado')
+.isInt().withMessage('El id del empleado debe ser un numero entero'),
+controladorPromociones.BuscarId);
+
+rutas.get('/filtro', 
+query('filtro')
+.notEmpty().withMessage('Debe escribir el filtro de busqueda del empleado')
+.isLength({min: 3}).withMessage('Debe escribir un filtro de 3 caracteres como mínimo'),
+controladorPromociones.BuscarFiltro);
 
 rutas.post('/guardar',
-body ('productos_Codigo')
+body ('productos_Codigocol')
 .notEmpty().withMessage('NO se aceptan valores vacios para el codigo del producto')                    
-.isLength({min:2}).withMessage('la cantidad minima de caracteres para el codigo del producto es 2'), 
+.isLength({max:15}).withMessage('La cantidad maxima de caracteres son 15 para el codigo del producto'), 
 controladorPromociones.Guardar);
 
 
@@ -15,9 +27,9 @@ rutas.put('/editar',
 query('id')
 .notEmpty().withMessage('NO se aceptan valores vacios para el id de la promocion')
 .isInt().withMessage('El id de la promocion debe ser un entero'),
-body('productos_Codigo')
+body('productos_Codigocol')
 .notEmpty().withMessage('NO se aceptan valores vacios para el codigo del producto')                    
-.isLength({min:2}).withMessage('la cantidad minima de caracteres para el codigo del producto es 2'),   
+.isLength({max:15}).withMessage('La cantidad maxima de caracteres son 15 para el codigo del producto'), 
 controladorPromociones.Editar);    
        
 
@@ -29,4 +41,5 @@ controladorPromociones.Eliminar);
 
 
 module.exports = rutas;                                                   
+
 
