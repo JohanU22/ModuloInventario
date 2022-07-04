@@ -8,6 +8,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use('/modulo/productos', require('./rutas/rutasProductos'));
+app.use('/modulo/impuestos', require('./rutas/rutasImpuestos'));
 //app.use('/api/', require('./rutas'));
 //app.use('/inventario/productos', require('./rutas/rutasProductos'));
 app.listen(app.get('port'), () => {
