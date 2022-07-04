@@ -7,6 +7,13 @@ notas.txt
 package-lock.json
 package.json
 src/controladores/controladorAutenticacion.js
+src/controladores/controladorImpuestos.js
+src/controladores/controladorProductos.js
+src/modelos/modeloImpuestos.js
+src/modelos/modeloProductos.js
+src/rutas/rutasImpuestos.js
+src/rutas/rutasProductos.js
+src/configuraciones/db.js
 src/app.js
 .sass-cache/
 /nbproject/

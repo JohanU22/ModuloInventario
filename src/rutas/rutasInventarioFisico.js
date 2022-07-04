@@ -4,7 +4,7 @@ const controladorInventarioFisico=require('../controladores/controladorInventari
 const rutas = Router();
 
 //Listar/Inicio
-rutas.get('/', controladorEmpleados.Inicio);
+rutas.get('/', controladorInventarioFisico.Inicio);
 rutas.get('/listar', controladorInventarioFisico.Listar);
 
 //Id
@@ -12,7 +12,7 @@ rutas.get('/id',
     query('id')
         .notEmpty().withMessage('No se aceptan valores vacios para el id')
         .isInt().withMessage('El id del inventario fisico debe ser entero'),
-    controladorEmpleados.BuscarId);
+        controladorInventarioFisico.BuscarId);
 
 //Guardar
 rutas.post('/guardar',
@@ -35,7 +35,7 @@ rutas.post('/guardar',
     body ('precio')
         .notEmpty().withMessage('No se aceptan valores vacios para el precio')
         .isFloat().withMessage('La valor del precio debe ser un flotante'),
-    controladorProductos.Guardar);
+        controladorInventarioFisico.Guardar);
 
 //Modificar
 rutas.put('/modificar',

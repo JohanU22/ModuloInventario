@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
-const InventarioFisico = require('../modelos/InventarioFisico');
-const Inventario = require('../modelos/ModeloInventario');
+const InventarioFisico = require('../modelos/modeloInventarioFisico');
+//const Inventario = require('../modelos/ModeloInventario');
 const Producto = require('../modelos/ModeloProductos');
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
@@ -34,19 +34,19 @@ exports.Inicio = async (req, res)=>{
             modulo: "InventarioFisico", 
             rutas: [
                 {
-                    ruta: "/api/InventarioFisico",
+                    ruta: "/modulo/InventarioFisico",
                     metodo: "get",
                     parametros:"",
                     descripcion: "Inicio del módulo de InventarioFisico"
                 },
                 { 
-                    ruta: "/api/InventarioFisico/listar",
+                    ruta: "/modulo/InventarioFisico/listar",
                     metodo: "get",
                     parametros:"",
                     descripcion: "Lista todos los InventarioFisico"
                 },
                 { 
-                    ruta: "/api/InventarioFisico/id",
+                    ruta: "/modulo/InventarioFisico/id",
                     metodo: "get",
                     parametros:{
                         id: "Codigo del Inventario fisico de tipo entero. Obligatorio."
@@ -54,7 +54,7 @@ exports.Inicio = async (req, res)=>{
                     descripcion: "Lista los datos del Inventario fisico"
                 },
                 {   
-                    ruta: "/api/InventarioFisico/guardar",
+                    ruta: "/modulo/InventarioFisico/guardar",
                     metodo: "post",
                     parametros:{
                             productos_Codigo: "Codigo del un producto registrado (debe ser numerico y entero), Obligatorio",
@@ -75,7 +75,7 @@ exports.Inicio = async (req, res)=>{
                     descripcion: "Guarda los datos del Inventario Fisico"
                 },
                 {   
-                    ruta: "/api/InventarioFisico/modificar",
+                    ruta: "/modulo/InventarioFisico/modificar",
                     metodo: "put",
                     parametros:{
                         id: "Codigo del un inventario fisico registrado (debe ser numerico y entero), Obligatorio",
@@ -97,7 +97,7 @@ exports.Inicio = async (req, res)=>{
                     descripcion: "Modifica los datos del Inventario Fisico"
                 },
                 {   
-                    ruta: "/api/InventarioFisico/eliminar",
+                    ruta: "/modulo/InventarioFisico/eliminar",
                     metodo: "id",
                     parametros:
                         {
