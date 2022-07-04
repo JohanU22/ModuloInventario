@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const modeloInventario = require('../modelos/modeloInventario');
 const { Op } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
+const Inventarios = require('../modelos/modeloInventario');
 function validacion (req){
     const validaciones = validationResult(req);
     var errores = [];
@@ -100,6 +101,81 @@ exports.Inicio = (req, res)=>{
     msjRes(res, 200, msj);
 };
 
+exports.BuscarId = async (req, res)=>{
+    var msj = validacion(req);
+    
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            const { id } = req.query;
+            const buscarInventario = await Inventarios.findOne({
+                attributes: ['id','fechahora','faltante','sobrante'],
+                where:{
+                    id
+                }
+            });
+            if(!buscarInventario){
+                msj.estado = 'Precaución';
+                msj.mensaje = 'La petición se ejecutó correctamente';
+                msj.errores={
+                    mensaje: 'El id del inventario no existe',
+                    parametro: 'id',
+                };
+            }
+            else{
+                msj.datos= buscarInventario;
+            }
+            msjRes(res, 200, msj);
+        } catch (er) {
+            msj.estado = 'Error';
+            msj.mensaje = 'La petición no se ejecutó';
+            msj.errores = er;
+            msjRes(res, 500, msj);
+        }
+    }
+};
+
+//BuscarFiltro
+exports.BuscarFiltro = async (req, res)=>{
+    var msj = validacion(req);
+    
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            var { filtro } = req.query;
+            filtro = '%'+filtro+'%' ;
+            const buscarInventario = await Inventarios.findAll({
+                attributes: ['id','fechahora','faltante','sobrante'],
+                where:{
+                    [Op.or]:{
+                        fechahora: {[Op.like]: filtro}
+                    }
+                }
+            });
+            if(!buscarInventario){
+                msj.estado = 'Precaución';
+                msj.mensaje = 'La petición se ejecutó correctamente';
+                msj.errores={
+                    mensaje: 'No existen usuarios con estos parametros',
+                    parametro: 'filtro',
+                };
+            }
+            else{
+                msj.datos=buscarInventario;
+            }
+            msjRes(res, 200, msj);
+        } catch (error) {
+            msj.estado = 'Error';
+            msj.mensaje = 'La petición no se ejecutó';
+            msj.errores = error;
+            msjRes(res, 500, msj);
+        }
+    }
+};
 
 //Listar
 exports.Listar = async (req, res) => {

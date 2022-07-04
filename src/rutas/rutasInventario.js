@@ -2,8 +2,22 @@ const {Router} = require('express');
 const { body, query } = require('express-validator');
 const controladorInventario = require('../controladores/controladorInventario');
 const rutas = Router();
+
 //Modulo
 rutas.get('/', controladorInventario.Inicio);
+
+//BuscarID
+rutas.get('/id',
+query('id').notEmpty().withMessage('Debe escribir el id del inventario')
+.isInt().withMessage('El id del inventario debe ser un numero entero'), 
+controladorInventario.BuscarId);
+
+//BuscarFiltro
+rutas.get('/filtro',
+query('filtro')
+.notEmpty().withMessage('Debe escribir el filtro de Inventario')
+.isLength({min: 3}).withMessage('Debe escribir un filtro de 3 caracteres como mínimo'),
+controladorInventario.BuscarFiltro);
 
 //Listar
 rutas.get('/listar', controladorInventario.Listar);
