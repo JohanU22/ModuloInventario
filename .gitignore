@@ -9,10 +9,13 @@ package.json
 src/controladores/controladorAutenticacion.js
 src/controladores/controladorImpuestos.js
 src/controladores/controladorProductos.js
+src/controladores/controladorInventario.js
 src/modelos/modeloImpuestos.js
 src/modelos/modeloProductos.js
+src/modelos/modeloInventario.js
 src/rutas/rutasImpuestos.js
 src/rutas/rutasProductos.js
+src/rutas/rutasInventario.js
 src/configuraciones/db.js
 src/app.js
 .sass-cache/

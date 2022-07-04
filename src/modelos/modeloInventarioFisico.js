@@ -39,7 +39,7 @@ const InventarioFisico = db.define('inventario_fisico',
             allowNull: false
         },
         fechahora: {
-            type: DataTypes.DATETIME,
+            type: DataTypes.DATE,
             allowNull: true
         },
         balanceexistencia: {
