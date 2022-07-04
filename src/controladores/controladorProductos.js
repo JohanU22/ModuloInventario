@@ -1,8 +1,9 @@
 const { validationResult } = require('express-validator');
 const modeloProducto = require('../modelos/modeloProductos');
+const modeloTipoproductos = require('../modelos/modeloTipoproductos');
 const { Op } = require('sequelize');
 const msjRes = require('../components/mensaje');
-const Producto = require('../modelos/modeloProductos');
+
 
 function validacion(req){
     const validaciones = validationResult(req);
@@ -168,6 +169,85 @@ exports.Listar = async (req, res) => {
     }
 
 };
+
+exports.BuscarId = async (req, res)=>{
+    var msj = validacion(req);
+    const { Codigo } = req.query;
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            const {Codigo} = req.query;
+            const buscarCodigo = await modeloProducto.findOne({
+                attributes:['Codigo', 'Nombre', 'TipoProducto', 'Existencia', 'Precio'],
+                where:{
+                    Codigo
+                }
+            });
+            if (!buscarCodigo){
+                msj.estado = 'precaucion';
+                msj.mensaje = 'La peticion se ejecuto correctamente';
+                msj.errores={
+                    mensaje: 'El Codigo del producto no existe',
+                    parametro: 'Codigo',
+                };
+            }
+            else{
+                //console.log(JSON.stringify(lista, null, ' '));
+                msj.datos= buscarCodigo;
+            }
+            msjRes(res, 200, msj);
+        } catch (error) {
+            console.error(error);
+            msj.estado = 'error';
+            msj.mensaje = 'La peticion no se ejecuto';
+            msj.errores = error;
+            msjRes(res, 500, msj);
+        }
+    }        
+};
+
+exports.BuscarFiltro = async (req, res)=>{
+    var msj = validacion(req);
+
+    if (msj.errores.length > 0){
+        msjRes(res, 200, msj);
+    }
+    else{
+        try {
+            var { filtro } = req.query;
+            filtro = '%'+filtro+'%' ;
+            const buscarProducto = await modeloProducto.findOne({
+                attributes: ['Codigo','Nombre','TipoProducto','Existencia', 'Precio'],
+                where:{
+                    [Op.or]:{
+                        Nombre: {[Op.like]: filtro}
+                    }
+                }
+            });
+            if(!buscarProducto){
+                msj.estado = 'Precaución';
+                msj.mensaje = 'La petición se ejecutó correctamente';
+                msj.errores={
+                    mensaje: 'No existen productos con estos parametros',
+                    parametro: 'filtro',
+                };
+            }
+            else{
+                msj.datos=buscarProducto;
+            }
+            msjRes(res, 200, msj);
+        } catch (error) {
+            msj.estado = 'Error';
+            msj.mensaje = 'La petición no se ejecutó';
+            msj.errores = error;
+            msjRes(res, 500, msj);
+        }
+    }
+};
+
+
 exports.Guardar = async (req, res) => {
     /*
     const validaciones = validationResult(req);
@@ -348,7 +428,7 @@ exports.Modificar = async (req, res) => {
                 msj.estado = 'precaucion';
                 msj.mensaje = 'La peticion se ejecuto correctamente';
                 msj.errores={
-                    mensaje: 'El id del empleado no existe',
+                    mensaje: 'El id del producto no existe',
                     parametro: 'id',
                 };
                 msjRes(res, 200, msj);
