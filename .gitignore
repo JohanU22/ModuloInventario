@@ -3,7 +3,7 @@
 *.zip
 .env
 .idea
-notas.txt
+.gitignore
 package-lock.json
 package.json
 src/controladores/controladorAutenticacion.js
@@ -22,3 +22,5 @@ src/app.js
 /nbproject/
 /nbproject/private/
 /node_modules/
+src/componentes/
+src/configuraciones/

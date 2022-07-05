@@ -1,8 +1,8 @@
 const { validationResult } = require('express-validator');
 const InventarioFisico = require('../modelos/modeloInventarioFisico');
-//const Inventario = require('../modelos/ModeloInventario');
+const Inventario = require('../modelos/ModeloInventario');
 const Producto = require('../modelos/ModeloProductos');
-const { Op } = require('sequelize');
+const { Op, and } = require('sequelize');
 const msjRes = require('../componentes/mensaje');
 
 //Funciones #######################################################
@@ -58,19 +58,18 @@ exports.Inicio = async (req, res)=>{
                     metodo: "post",
                     parametros:{
                             productos_Codigo: "Codigo del un producto registrado (debe ser numerico y entero), Obligatorio",
-                            inventarios_id:"Codigo de un inventario registrado (longitud maxima: 15 caracteres), Obligatorio",
+                            inventarios_id: "Codigo de un inventario registrado (longitud maxima: 15 caracteres), Obligatorio",
                             cantidadactual: "Cantidad actual en inventario (debe ser valor numerico), Obligatorio",
                             cantidadsistema: "Cantidad en sistema (debe ser valor numerico), Obligatorio",
                             costo: "Costo por producto (debe ser valor numerico), Obligatorio",
                             precio: "precio del producto (debe ser valor numerico), Obligatorio",
                             
-                            /* //Otros parametros (usa default/generados por script)
+                            //Otros parametros (fecha usa default/otros usan script)
 
-                            fechahora: "Fecha de registro",       //DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-                            balanceexistencia: "",      //DOUBLE GENERATED ALWAYS AS ((`cantidadsistema` - `cantidadactual`)) VIRTUAL,
-                            faltante: "",       //GENERATED ALWAYS AS ((case when (`balanceexistencia` < 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` >= 0) then 0 end)) STORED,
-                            sobrante: "",        //GENERATED ALWAYS AS ((case when (`balanceexistencia` > 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` <= 0) then 0 end)) STORED,
-                            */
+                            //fechahora: "Fecha de registro",       //DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+                            //balanceexistencia: "balance en existencia",      //DOUBLE GENERATED ALWAYS AS ((`cantidadsistema` - `cantidadactual`)) VIRTUAL,
+                            //faltante: "faltante",       //GENERATED ALWAYS AS ((case when (`balanceexistencia` < 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` >= 0) then 0 end)) STORED,
+                            //sobrante: "sobrante",        //GENERATED ALWAYS AS ((case when (`balanceexistencia` > 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` <= 0) then 0 end)) STORED,
                         },
                     descripcion: "Guarda los datos del Inventario Fisico"
                 },
@@ -86,13 +85,12 @@ exports.Inicio = async (req, res)=>{
                         costo: "Costo por producto (debe ser valor numerico), Obligatorio",
                         precio: "precio del producto (debe ser valor numerico), Obligatorio",
                         
-                        /* //Otros parametros (usa default/generados por script)
+                            //Otros parametros (fecha usa default/otros usan script)
 
-                        fechahora: "Fecha de registro",       //DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-                        balanceexistencia: "",      //DOUBLE GENERATED ALWAYS AS ((`cantidadsistema` - `cantidadactual`)) VIRTUAL,
-                        faltante: "",       //GENERATED ALWAYS AS ((case when (`balanceexistencia` < 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` >= 0) then 0 end)) STORED,
-                        sobrante: "",        //GENERATED ALWAYS AS ((case when (`balanceexistencia` > 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` <= 0) then 0 end)) STORED,
-                        */
+                            //fechahora: "Fecha de registro",       //DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+                            //balanceexistencia: "balance en existencia",      //DOUBLE GENERATED ALWAYS AS ((`cantidadsistema` - `cantidadactual`)) VIRTUAL,
+                            //faltante: "faltante",       //GENERATED ALWAYS AS ((case when (`balanceexistencia` < 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` >= 0) then 0 end)) STORED,
+                            //sobrante: "sobrante",        //GENERATED ALWAYS AS ((case when (`balanceexistencia` > 0) then (`balanceexistencia` * `precio`) when (`balanceexistencia` <= 0) then 0 end)) STORED,
                         },
                     descripcion: "Modifica los datos del Inventario Fisico"
                 },
@@ -127,10 +125,11 @@ exports.Listar = async (req, res)=>{
     try {
         const lista = await InventarioFisico.findAll({
             attributes: ['id','productos_Codigo','inventarios_id','cantidadactual', 'cantidadsistema','costo','precio','fechahora','balanceexistencia','faltante','sobrante'],
-            include: {
+            //añadir nombre del producto
+            /*include: {    
                 model: Producto,
                 attributes:['Nombre'],
-            },
+            },*/
         });
         msj.datos= lista;
         msjRes(res, 200, msj);
@@ -187,40 +186,41 @@ exports.Guardar = async (req, res) =>{
         msjRes(res, 200, msj);
     }
     else{
-        const {productos_Codigo, inventarios_id, cantidadactual, cantidadsistema, costo, precio} = req.body;
+        const {productos_Codigo, inventarios_id} = req.body;
         try {
-            const buscarInventarioFisico = await InventarioFisico.findOne({where:{inventarios_id: productos_Codigo, inventarios_id: inventarios_id}});
+        const buscarInventarioFisico = await InventarioFisico.findAll({where:{productos_Codigo: productos_Codigo,inventarios_id: inventarios_id}});
             if(buscarInventarioFisico){
                 msj.estado = 'precaucion';
                 msj.mensaje = 'La peticion se ejecuto correctamente';
                 msj.errores={
                     mensaje: 'El producto ya existe en el inventario',
-                    parametro: 'productos_Codigo',
+                    parametro:
+                        'productos_Codigo / inventarios_id',
                 };
                 msjRes(res, 200, msj);
             }
-            else {
-                const buscarProducto = await Producto.findOne({where:{id: Codigo}});
-                if(!buscarProducto){
-                    msj.estado = 'precaucion';
-                    msj.mensaje = 'La peticion se ejecuto correctamente';
-                    msj.errores={
-                        mensaje: 'El Codigo del producto no existe',
-                        parametro: 'Codigo',
-                    };
-                    msjRes(res, 200, msj);
+            /*else {
+                const buscarCodigo = await Producto.findOne({where:{Codigo: Codigo1}});
+                if(!buscarCodigo){
+                        msj.estado = 'precaucion';
+                        msj.mensaje = 'La peticion se ejecuto correctamente';
+                        msj.errores={
+                            mensaje: 'El Codigo del producto no existe',
+                            parametro: 'productos_Codigo',
+                        };
+                        msjRes(res, 200, msj);
                 }
                 else{
-                    const buscarInventario = await Inventario.findOne({where:{id: id}});
+                    const buscarInventario = await Inventario.findOne({where:{id: codigo2}});
                     if(!buscarInventario){
                         msj.estado = 'precaucion';
                         msj.mensaje = 'La peticion se ejecuto correctamente';
                         msj.errores={
                             mensaje: 'El Codigo del Inventario no existe',
-                            parametro: 'id',
+                            parametro: 'inventarios_id',
                         };
                         msjRes(res, 200, msj);
-                    }
+                    }*/
                     else{
                         await InventarioFisico.create({
                             ...req.body,
@@ -236,8 +236,8 @@ exports.Guardar = async (req, res) =>{
                             msjRes(res, 500, msj);
                         });
                     }
-                }
-            }
+                //}
+            //}
         } 
         catch (er) {
             console.error(er);
@@ -258,7 +258,7 @@ exports.Modificar = async (req, res) =>{
     }
     else{
         try {
-            const { id } = req.query;
+            const {id,productos_Codigo, inventarios_id, cantidadactual, cantidadsistema, costo, precio, fechahora, balanceexistencia, faltante, sobrante} = req.query;
             var buscarInventarioFisico = await InventarioFisico.findByPk(id);
             if(!buscarInventarioFisico){
                 msj.estado = 'precaucion';
@@ -270,10 +270,10 @@ exports.Modificar = async (req, res) =>{
                 msjRes(res, 200, msj);
             }
             else{
-                await Empleado.update({...req.body},{ where:{id: id}})
-                    .then((data) => {
-                        msj.datos=data;
-                        msjRes(res, 200, msj);
+                await InventarioFisico.update({...req.body},{ where:{id: id}})
+                    .then((data)=>{
+                            msj.datos=data;
+                            msjRes(res, 200, msj);
                     })
                     .catch((er)=>{
                         msj.estado = 'error';

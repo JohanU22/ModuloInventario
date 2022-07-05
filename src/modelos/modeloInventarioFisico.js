@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
-const Producto = require('./ModeloProductos');
+const producto = require('./ModeloProductos');
 const Inventario = require('./ModeloInventario');
 const InventarioFisico = db.define('inventario_fisico', 
     {
@@ -44,17 +44,14 @@ const InventarioFisico = db.define('inventario_fisico',
         },
         balanceexistencia: {
             type: DataTypes.DOUBLE,
-            defaultValue: '0',
             allowNull: true
         },
         faltante: {
             type: DataTypes.DOUBLE,
-            defaultValue: '0',
             allowNull: true
         },
         sobrante: {
             type: DataTypes.DOUBLE,
-            defaultValue: '0',
             allowNull: true
         }
     },
@@ -65,11 +62,11 @@ const InventarioFisico = db.define('inventario_fisico',
 );
 
 //Llaves foraneas ========================================
-Producto.hasMany(InventarioFisico, {
+producto.hasMany(InventarioFisico, {
     foreignKey: 'productos_Codigo',
     otherKey: 'Codigo'
 });
-InventarioFisico.belongsTo(Producto,{
+InventarioFisico.belongsTo(producto,{
     foreignKey: 'productos_Codigo',
     otherKey: 'Codigo'
 });
