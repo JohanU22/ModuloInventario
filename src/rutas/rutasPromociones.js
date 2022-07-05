@@ -27,7 +27,7 @@ rutas.put('/editar',
 query('id')
 .notEmpty().withMessage('NO se aceptan valores vacios para el id de la promocion')
 .isInt().withMessage('El id de la promocion debe ser un entero'),
-body('productos_Codigocol')
+body('productos_Codigo')
 .notEmpty().withMessage('NO se aceptan valores vacios para el codigo del producto')                    
 .isLength({max:15}).withMessage('La cantidad maxima de caracteres son 15 para el codigo del producto'), 
 controladorPromociones.Editar);    

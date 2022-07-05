@@ -129,7 +129,7 @@ exports.BuscarId = async (req, res)=>{
         try{
             const {id} = req.query;
             const buscarPromocion = await modeloPromociones.findOne({
-                attributes: ['id', 'productos_Codigocol' , 'inicio', 'fin', 'creado', 'modificado'],
+                attributes: ['id', 'productos_Codigo' , 'inicio', 'fin', 'creado', 'modificado'],
                 where:{
                     id
                 }
@@ -168,10 +168,10 @@ exports.BuscarFiltro = async (req, res)=>{
                 var { filtro } = req.query;
                 filtro= ''+filtro+'';
                 const buscarPromocion = await modeloPromociones.findAll({
-                    attributes: ['id', 'productos_Codigocol' , 'inicio', 'fin', 'creado', 'modificado'],
+                    attributes: ['id', 'productos_Codigo' , 'inicio', 'fin', 'creado', 'modificado'],
                     where:{
                         [Op.or]:{
-                            productos_Codigocol: {[Op.like]: filtro}
+                            productos_Codigo: {[Op.like]: filtro}
                            
                         }
                     }
@@ -248,7 +248,7 @@ exports.Editar = async(req, res) => {
 
     } else {
         const { id } = req.query;
-        const {  productos_Codigocol, inicio, fin, creado, modificado } = req.body;
+        const {  productos_Codigo, inicio, fin, creado, modificado } = req.body;
 
         try {
             var buscarPromocion = await modeloPromociones.findOne({
@@ -261,7 +261,7 @@ exports.Editar = async(req, res) => {
                 msj.mensaje = 'El id del inventario no existe'
                 
             }else{
-                buscarPromocion.productos_Codigocol = productos_Codigocol;
+                buscarPromocion.productos_Codigo = productos_Codigo;
                 buscarPromocion.inicio = inicio;
                 buscarPromocion.fin = fin;
                 buscarPromocion.creado = creado ;
