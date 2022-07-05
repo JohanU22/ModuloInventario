@@ -187,20 +187,19 @@ exports.Guardar = async (req, res) =>{
     }
     else{
         const {productos_Codigo, inventarios_id} = req.body;
-        try {
-        const buscarInventarioFisico = await InventarioFisico.findAll({where:{productos_Codigo: productos_Codigo,inventarios_id: inventarios_id}});
+        try {/*
+        const buscarInventarioFisico = await InventarioFisico.findOne({where:{productos_Codigo: productos_Codigo}}&&{where:{inventarios_id: inventarios_id}});
             if(buscarInventarioFisico){
                 msj.estado = 'precaucion';
                 msj.mensaje = 'La peticion se ejecuto correctamente';
                 msj.errores={
                     mensaje: 'El producto ya existe en el inventario',
-                    parametro:
-                        'productos_Codigo / inventarios_id',
+                    parametro: 'productos_Codigo',
                 };
                 msjRes(res, 200, msj);
             }
-            /*else {
-                const buscarCodigo = await Producto.findOne({where:{Codigo: Codigo1}});
+            else {*/
+                const buscarCodigo = await Producto.findOne({where:{Codigo: productos_Codigo}});
                 if(!buscarCodigo){
                         msj.estado = 'precaucion';
                         msj.mensaje = 'La peticion se ejecuto correctamente';
@@ -211,7 +210,7 @@ exports.Guardar = async (req, res) =>{
                         msjRes(res, 200, msj);
                 }
                 else{
-                    const buscarInventario = await Inventario.findOne({where:{id: codigo2}});
+                    const buscarInventario = await Inventario.findOne({where:{id: inventarios_id}});
                     if(!buscarInventario){
                         msj.estado = 'precaucion';
                         msj.mensaje = 'La peticion se ejecuto correctamente';
@@ -220,7 +219,7 @@ exports.Guardar = async (req, res) =>{
                             parametro: 'inventarios_id',
                         };
                         msjRes(res, 200, msj);
-                    }*/
+                    }
                     else{
                         await InventarioFisico.create({
                             ...req.body,
@@ -236,9 +235,9 @@ exports.Guardar = async (req, res) =>{
                             msjRes(res, 500, msj);
                         });
                     }
-                //}
-            //}
-        } 
+                }
+            }
+        //} 
         catch (er) {
             console.error(er);
             msj.estado = 'error';
@@ -271,9 +270,9 @@ exports.Modificar = async (req, res) =>{
             }
             else{
                 await InventarioFisico.update({...req.body},{ where:{id: id}})
-                    .then((data)=>{
-                            msj.datos=data;
-                            msjRes(res, 200, msj);
+                    .then((data) => {
+                        msj.datos=data;
+                        msjRes(res, 200, msj);
                     })
                     .catch((er)=>{
                         msj.estado = 'error';
