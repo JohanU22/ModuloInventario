@@ -10,7 +10,9 @@ app.use(express.json());
 app.use('/modulo/productos', require('./rutas/rutasProductos'));
 app.use('/modulo/impuestos', require('./rutas/rutasImpuestos'));
 app.use('/modulo/promociones', require('./rutas/rutasPromociones'));
-app.use('/modulo/productoprooveedores', require('./rutas/rutasProductosProveedores'));
+//app.use('/modulo/productoprooveedores', require('./rutas/rutasProductosProveedores'));
+
+
 //app.use('/api/', require('./rutas'));
 //app.use('/inventario/productos', require('./rutas/rutasProductos'));
 app.listen(app.get('port'), () => {
