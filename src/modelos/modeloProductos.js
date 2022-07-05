@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../configuraciones/db');
+const TipoProductos = require('./modeloTipoproductos');
 const Producto = db.define(
     'productos', //Nombre de la tabla debe ser plural
     {
@@ -103,4 +104,15 @@ const Producto = db.define(
     }
 
 );
+TipoProductos.hasMany(Producto, {
+    foreignKey: 'idprincipal',
+    otherKey: 'Codigo'
+
+});
+Producto.belongsTo(TipoProductos,{
+    foreignKey: 'idprincipal',
+    otherKey: 'Codigo'
+});
+
+
 module.exports = Producto;

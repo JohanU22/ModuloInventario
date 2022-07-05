@@ -8,11 +8,15 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use('/modulo/productos', require('./rutas/rutasProductos'));
+<<<<<<< HEAD
 app.use('/modulo/impuestos', require('./rutas/rutasImpuestos'));
 app.use('/modulo/promociones', require('./rutas/rutasPromociones'));
 //app.use('/modulo/productoprooveedores', require('./rutas/rutasProductosProveedores'));
 
 
+=======
+app.use('/modulo/tipoproductos',require('./rutas/rutasTipoproductos'));
+>>>>>>> develop_edgardo
 //app.use('/api/', require('./rutas'));
 //app.use('/inventario/productos', require('./rutas/rutasProductos'));
 app.listen(app.get('port'), () => {

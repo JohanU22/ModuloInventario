@@ -2,7 +2,21 @@ const { Router } = require('express');
 const { body, query } = require('express-validator');
 const controladorProductos = require('../controladores/controladorProductos');
 const rutas = Router();
+
+rutas.get('/', controladorProductos.Inicio);
+
 rutas.get('/listar', controladorProductos.Listar);
+
+rutas.get('/Codigo',
+query('Codigo').notEmpty().withMessage('Debe escribir el Codigo del producto')
+.isInt().withMessage('El Codigo del Producto debe ser un numero entero'), 
+controladorProductos.BuscarId);
+
+rutas.get('/filtro',
+query('filtro')
+.notEmpty().withMessage('Debe escribir el nombre del producto')
+.isLength({min: 1}).withMessage('Debe escribir un nombre de 1 caracteres como mínimo'),
+controladorProductos.BuscarFiltro);
 
 rutas.post('/guardar',
 body ('Codigo')
