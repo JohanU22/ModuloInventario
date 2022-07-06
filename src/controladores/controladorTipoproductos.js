@@ -111,7 +111,7 @@ exports.Inicio = async (req, res)=>{
         api: "MODULO INVENTARIO",
         descripcion: "Modulo Inventario para el sistema de gestion de restaurantes",
         propiedad: "Movil 2",
-        desarrollador: "Ing. Carlos Flores",
+        desarrollador: "Edgardo Rojas",
         colaboradores: "",
         fecha: "19/05/2022",
         listaModulos
