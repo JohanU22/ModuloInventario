@@ -3,7 +3,9 @@
 *.zip
 .env
 .idea
+
 .sass-cache/
 /nbproject/
 /nbproject/private/
 /node_modules/
+
