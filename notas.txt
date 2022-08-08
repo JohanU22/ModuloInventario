@@ -1,0 +1,44 @@
+-------TABLAS -----------------
+Productos = Johan Urbina | Edgardo Rojas
+TipoProducto = Edgardo Rojas
+Producto_Impuestos = Jose Figueroa
+Impuestos = Johan Urbina
+Promociones = Marcela Barahona
+inventarios = Jose Almendarez
+detalle_Inventarios = Miguel 
+Inventario_Fisico = Eduardo Lopez
+
+
+
+
+
+
+
+
+Paquetes a instalar
+
+
+npm install express
+npm install morgan
+npm install nodemon
+npm run dev
+
+
+30/05/2022
+npm instal bcrypt
+
+
+09/06/2022
+npm install path
+npm install file-system
+npm install moment
+npm install multer
+
+
+14/06/2022
+npm install nodemailer
+npm install dotenv
+npm install passport
+npm install jsonwebtoken
+npm install passport-jwt
+npm install audit fix --forcenpm
