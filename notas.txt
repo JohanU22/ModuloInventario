@@ -42,3 +42,5 @@ npm install passport
 npm install jsonwebtoken
 npm install passport-jwt
 npm install audit fix --forcenpm
+
+*Debes utilizar la extension thunder para poder hacer las peticiones a la api
