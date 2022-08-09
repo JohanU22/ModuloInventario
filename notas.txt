@@ -1,3 +1,20 @@
+-------TABLAS -----------------
+Productos = Johan Urbina | Edgardo Rojas
+TipoProducto = Edgardo Rojas
+Producto_Impuestos = Jose Figueroa
+Impuestos = Johan Urbina
+Promociones = Marcela Barahona
+inventarios = Jose Almendarez
+detalle_Inventarios = Miguel 
+Inventario_Fisico = Eduardo Lopez
+
+
+
+
+
+
+
+
 Paquetes a instalar
 
 
@@ -8,7 +25,7 @@ npm run dev
 
 
 30/05/2022
-npm instal bcrypt
+npm install bcrypt
 
 
 09/06/2022
