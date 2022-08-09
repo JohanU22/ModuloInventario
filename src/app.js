@@ -18,7 +18,6 @@ app.use('/modulo/DetalleInventarios', require('./rutas/rutasDetalleInventarios')
 
 
 //app.use('/api/', require('./rutas'));
-//app.use('/inventario/productos', require('./rutas/rutasProductos'));
 app.listen(app.get('port'), () => {
     console.log("Servidor iniciado en el puerto " + app.get('port'));
 })
